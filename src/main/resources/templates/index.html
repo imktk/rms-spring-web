@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="ISO-8859-1">
+<title>HOME PAGE</title>
+</head>
+<body>
+	<th:block th:include="/header"></th:block>  
+	<div style="text-align:center"><h1 style="color:red;">HOME PAGE</h1></div>
+	
+	<div style="text-align: center"> 
+		<span sec:authorize="!isAnonymous()" >
+			<font color="blue">Welcome to </font> <strong sec:authentication="name"></strong> 
+		</span> 
+		
+		<span sec:authorize="isAnonymous()" >
+			<font color="blue">Please login! </font>
+		</span>
+	</div>
+</body>
+</html>

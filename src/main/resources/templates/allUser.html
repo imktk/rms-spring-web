@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>USER INFORMATION PAGE</title>
+</head>
+<body>
+	<th:block th:include="/header"></th:block>  
+	<p class="text-center">
+   		<strong th:if="${message}" th:utext="${message}" style="color: red;" id="userMessage"></strong>
+   	</p>
+	
+<div class="container" style="max-width: max-content;">
+<!--     <div class="row col-md-6 col-md-offset-2 custyle"> -->
+    <a href="#" th:href="@{/register}" class="btn btn-primary btn-xs pull-right" style="margin-bottom:20px"><b>+</b> Add User </a>
+    <form th:action="@{/allUser}" method='GET'>
+    	<div style="margin-bottom: 20px">
+    		<input type="text" style="width: 50%" name="search" /> <button type="submit" id="btnSearch" class="btn btn-primary" style="width: 127px">Search</button>
+    	</div> 
+    </form>
+    <table class="table table-striped custab" style="margin: auto; width: auto;"> 
+    <thead>
+        <tr>
+            <th width="50">No</th>
+			<th width="100">Id</th>
+		    <th width="200">Username</th>
+		    <th width="200">Password</th>
+            <th class="text-center" width="300">Action</th>
+        </tr>
+    </thead>
+            <tr th:each="user,i : ${listUser}">
+			<td th:text="${i.index + 1}"></td>
+			<td th:text="${user.id}"></td>
+			<td th:text="${user.username}"></td>
+			<td th:text="${user.password}"></td>
+			<td class="text-center">
+				
+				<a class='btn btn-info btn-xs' href="#" th:href="@{/updateUser/} + ${user.id}">
+               		<span class="glyphicon glyphicon-edit"></span> Update Password
+               	</a> 
+               	<a id="btnDelete" href="#" th:href="@{/deleteUser/} + ${user.id}" class="btn btn-danger btn-xs" onclick="return confirm('You want to delete?');">
+               		<span class="glyphicon glyphicon-remove"></span> Delete
+               	</a>
+			</td>
+			
+		</tr>
+    </table>
+<!--     </div> -->
+
+<nav aria-label="Pagination" th:if="${listUser.totalPages gt 0}">
+    <ul class="pagination justify-content-center font-weight-bold">
+        <li class="page-item" th:classappend="${listUser.number eq 0} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/allUser?page={id}(id=${listUser.number - 1})}"
+               aria-label="Previous" title="Previous Page" data-toggle="tooltip">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" th:classappend="${i eq listUser.number } ? 'active'"
+            th:each="i : ${#numbers.sequence( 0, listUser.totalPages - 1, 1)}">
+            <a class="page-link" th:href="@{/allUser?page={id}(id=${i})}" th:text="${i + 1}"
+               th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+        </li>
+        <li class="page-item" th:classappend="${listUser.number + 1 eq listUser.totalPages} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/allUser?page={id}(id=${listUser.number + 1})}"
+               aria-label="Next" title="Next Page" data-toggle="tooltip">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+</div>	
+	
+</body>
+</html>

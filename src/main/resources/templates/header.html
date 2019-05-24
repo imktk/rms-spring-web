@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link th:href="@{css/main.css}" rel="stylesheet" />
+
+</head>
+<body>
+	<div style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
+	 
+	  <a th:href="@{/}">Home</a>
+	 
+	     | &nbsp;
+	  
+	   <a th:href="@{/allUser}">All Users</a>
+	  
+	     | &nbsp;
+	     
+	     	<strong sec:authorize="!isAnonymous()" sec:authentication="name"></strong> 
+		   	<a sec:authorize="isAnonymous()" th:href="@{/login}"> Login </a>
+		   
+	     | &nbsp;
+	  	
+	  		<a sec:authorize="!isAnonymous()" th:href="@{/logout}"> Logout </a>
+	  		<a sec:authorize="isAnonymous()" th:href="@{/register}"> Register </a>
+	  		
+	     | &nbsp;  		
+	</div>
+
+<script type="text/javascript" th:src="@{js/main.js}"></script>
+</body>
+</html>
+
+
