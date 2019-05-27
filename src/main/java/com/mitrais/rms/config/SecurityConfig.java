@@ -23,17 +23,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers("/", "/checkLogin", "/register", "/createUser", "/js/**", "/css/**", "/fonts/**", "/images/**").permitAll()
+			.antMatchers("/", "/login", "/checkLogin", "/register", "/createUser", "/js/**", "/css/**", "/fonts/**", "/images/**").permitAll()
 			.anyRequest().authenticated()
 			.and().httpBasic();
 		
 		http.authorizeRequests()
 			.and().formLogin()
             .loginPage("/login")
+            .failureUrl("/login?error")
+            .defaultSuccessUrl("/")
             .usernameParameter("username")
             .passwordParameter("password")
-            .defaultSuccessUrl("/")
-            .failureUrl("/login?error")
             ;
 		
 		http.authorizeRequests()
