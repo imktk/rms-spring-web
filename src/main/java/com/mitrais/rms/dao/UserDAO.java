@@ -1,11 +1,13 @@
 package com.mitrais.rms.dao;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import com.mitrais.rms.entity.User;
 @Transactional
 public class UserDAO {
 
+	static final Logger logger = Logger.getLogger(UserDAO.class);
+	
 	@Autowired
 	private EntityManager entityManager;
 	
@@ -29,7 +33,7 @@ public class UserDAO {
  
             return (User) query.getSingleResult();
         } catch (NoResultException e) {
-        	e.printStackTrace();
+        	logger.error(e); 
             return null;
         }
     }
@@ -42,7 +46,8 @@ public class UserDAO {
  
             return query.getResultList();
         } catch (NoResultException e) {
-            return null;
+        	logger.error(e); 
+            return Collections.emptyList();
         }
     }
     
@@ -58,6 +63,7 @@ public class UserDAO {
  
             return (User) query.getSingleResult();
         } catch (NoResultException e) {
+        	logger.error(e); 
             return null;
         }
     }

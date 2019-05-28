@@ -14,14 +14,19 @@
 	<div style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
 	 
 	  <a th:href="@{/}">Home</a>
-	 
-	     | &nbsp;
-	  
-	   <a th:href="@{/allUser}">All Users</a>
-	  
 	     | &nbsp;
 	     
-	     	<strong sec:authorize="!isAnonymous()" sec:authentication="name"></strong> 
+	  <span sec:authorize="hasAuthority('USER')">
+	   	 <a th:href="@{/userInfo}">User Info</a>
+	     | &nbsp;
+	  </span> 
+  	  <span sec:authorize="hasAuthority('ADMIN')">
+	   	 <a th:href="@{/allUser}">All Users</a>
+	     | &nbsp;
+	     <a th:href="@{/userInfo}">User Info</a>
+	     | &nbsp;
+	  </span> 
+	     	<strong sec:authorize="!isAnonymous()" sec:authentication="name"></strong> <span sec:authorize="!isAnonymous()" th:text="${#authentication.authorities}"></span>
 		   	<a sec:authorize="isAnonymous()" th:href="@{/login}"> Login </a>
 		   
 	     | &nbsp;

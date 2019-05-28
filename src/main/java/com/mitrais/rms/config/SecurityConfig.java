@@ -1,13 +1,11 @@
 package com.mitrais.rms.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -26,6 +24,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers("/", "/login", "/checkLogin", "/register", "/createUser", "/js/**", "/css/**", "/fonts/**", "/images/**").permitAll()
 			.anyRequest().authenticated()
 			.and().httpBasic();
+		
+        http.authorizeRequests()
+        	.antMatchers("/userInfo")
+        	.access("hasAnyRole('USER', 'ADMIN')");
+
+        http.authorizeRequests()
+        	.antMatchers("/allUser")
+        	.access("hasRole('ADMIN')");
 		
 		http.authorizeRequests()
 			.and().formLogin()
@@ -49,11 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		        .accessDeniedPage("/error");
 
     }
-	
-	@Bean
-	public PasswordEncoder passwordEncoder(){
-	    return new NoPasswordEncoder();
-	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

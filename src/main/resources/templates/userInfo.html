@@ -15,21 +15,15 @@
 		<div class="modal-content">
     			<div class="modal-header">
 					<h4 class="modal-title">
-						UPDATE PASSWORD
+						USER INFORMATION
 					</h4>
 				</div>
 				<div class="modal-body">
-					<form name='f' th:action="@{/updateUser}" method='POST' novalidate="novalidate" id="updateForm" th:object="${updateForm}" >
-						<div id="errorSignUp">
-							<strong th:if="${message}" th:utext="${message}" style="color: red;" id="updateMessage"></strong>
-						</div>
-						<input type="hidden" th:field="*{id}" />
-						<input type="hidden" th:field="*{role}" />
 						<div class="form-group">
-							<label class="control-label" for="email">User</label>
+							<label class="control-label" for="email">Username</label>
 							<div class="input-group">
 								<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-								<input class="form-control" placeholder="user" th:field="*{username}" id="emailSignUp" readonly="readonly">
+								<input class="form-control" th:value="${user.username}" readonly="readonly">
 							</div>
 						</div>
 							
@@ -37,21 +31,18 @@
 							<label class="control-label" for="password">Password</label>
 							<div class="input-group">
 								<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-								<input class="form-control" placeholder="password" th:field="*{password}" id="passwordSignUp" type="password">
+								<input class="form-control" th:value="${user.password}" type="password" readonly="readonly">
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="control-label" for="password">Confirm password</label>
+							<label class="control-label" for="password">Role</label>
 							<div class="input-group">
 								<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-								<input class="form-control" placeholder="confirm password" th:field="*{retypePassword}" id="passwordConfirmSignUp" type="password">
+								<input class="form-control" th:value="${user.role}" readonly="readonly">
 							</div>
 						</div>
-						
-						<button type="submit" id="btnSignUp" class="btn btn-primary" style="width: 127px;">Update</button>
-					</form>
-					
+						<a sec:authorize="!isAnonymous()" th:href="@{/updateUser/{id}(id=${user.id})}"> Change Password </a>
 				</div>
 			</div>
             </div>

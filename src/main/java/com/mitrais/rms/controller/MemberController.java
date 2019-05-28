@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,8 @@ import com.mitrais.rms.service.UserService;
 
 @Controller
 public class MemberController {
+	
+	static final Logger logger = Logger.getLogger(MemberController.class);
 
 	static final String DELETE_SUCC_MESS = "The User Successfully Deleted!";
 	static final String DELETE_ERR_MESS = "Failed to Delete User!";
@@ -47,9 +50,19 @@ public class MemberController {
     			allUser = userService.searchByUsername(query, pageable);
     		mav.addObject("listUser", allUser);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e); 
 		}
         return mav;
+    }
+    
+    @GetMapping(value = "/userInfo")
+    public ModelAndView userInfoPage(HttpServletRequest request, HttpServletResponse response) {
+    	ModelAndView mav = new ModelAndView("/userInfo");
+    	String username = request.getUserPrincipal().getName();
+    	User user = userService.findUserAccount(username);
+    	if(user != null)
+    		mav.addObject("user", user);
+    	return mav;
     }
     
     @GetMapping(value = "/logout")
@@ -74,6 +87,7 @@ public class MemberController {
     			mav.addObject("message", REGISTER_ERR_MESS);
     		}
 		} catch (Exception e) {
+			logger.error(e); 
 			mav.addObject("registerForm", userForm);
 			mav.addObject("message",  returnExceptionMessage(e, REGISTER_ERR_MESS));
 		}
@@ -91,7 +105,7 @@ public class MemberController {
         		redirAttrs.addFlashAttribute("message", UPDATE_ERR_MESS);
     		}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e); 
     		redirAttrs.addFlashAttribute("message", returnExceptionMessage(e, UPDATE_ERR_MESS));
 		}
     	return mav;
@@ -105,7 +119,7 @@ public class MemberController {
 			userService.deleteUser(id);
 			redirAttrs.addFlashAttribute("message", DELETE_SUCC_MESS);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e); 
 			redirAttrs.addFlashAttribute("message", DELETE_ERR_MESS);
 		}
     	return mav;

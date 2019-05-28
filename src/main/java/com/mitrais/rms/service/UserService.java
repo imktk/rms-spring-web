@@ -2,6 +2,7 @@ package com.mitrais.rms.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,16 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mitrais.rms.dao.UserDAO;
 import com.mitrais.rms.dao.UserRepository;
 import com.mitrais.rms.entity.User;
+import com.mitrais.rms.exception.AppException;
 import com.mitrais.rms.form.UserForm;
 
 @Service
 public class UserService {
 
+	static final Logger logger = Logger.getLogger(UserService.class);
+	
 	@Autowired
 	private UserDAO userDAO;
 	
 	@Autowired
-	private UserRepository<User> userRepo;
+	private UserRepository userRepo;
 	
 	@Transactional
 	public List<User> searchByUsername(String username)
@@ -76,16 +80,16 @@ public class UserService {
     }
     
     @Transactional
-    public boolean createUser(UserForm user) throws Exception
+    public boolean createUser(UserForm user) throws AppException
     {
     	try {
     		User findUserAccount = userDAO.findUserAccount(user.getUsername());
     		if(findUserAccount != null)
-    			throw new Exception("005");
+    			throw new AppException("005");
     		
     		return userRepo.save(user.convertToUser()) != null;
     	} catch (Exception e) {
-    		e.printStackTrace();
+    		logger.error(e); 
 			throw e;
 		}
     }

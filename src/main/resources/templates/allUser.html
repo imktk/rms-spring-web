@@ -25,6 +25,7 @@
 			<th width="100">Id</th>
 		    <th width="200">Username</th>
 		    <th width="200">Password</th>
+		    <th width="200">Role</th>
             <th class="text-center" width="300">Action</th>
         </tr>
     </thead>
@@ -33,6 +34,7 @@
 			<td th:text="${user.id}"></td>
 			<td th:text="${user.username}"></td>
 			<td th:text="${user.password}"></td>
+			<td th:text="${user.role}"></td>
 			<td class="text-center">
 				
 				<a class='btn btn-info btn-xs' href="#" th:href="@{/updateUser/} + ${user.id}">

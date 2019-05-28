@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.mitrais.rms.entity.User;
 
-public interface UserRepository<P> extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Long>{
 
 	@Query("SELECT t FROM User t WHERE UPPER(t.username) LIKE CONCAT('%',UPPER(:username),'%')")
 	List<User> searchByUsername(@Param("username") String username);
