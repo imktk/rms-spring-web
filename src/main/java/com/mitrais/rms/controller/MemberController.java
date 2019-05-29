@@ -112,10 +112,18 @@ public class MemberController {
     }
 
     @GetMapping(value = "/deleteUser/{id}")
-    public ModelAndView deleteUserById(@PathVariable Long id, RedirectAttributes redirAttrs) {
+    public ModelAndView deleteUserById(@PathVariable Long id, RedirectAttributes redirAttrs, HttpServletRequest request) {
     	ModelAndView mav = null;
     	try {
 			mav = new ModelAndView("redirect:/allUser");
+			User user = userService.findById(id);
+			String username = request.getUserPrincipal().getName();
+			if(user != null && username.equalsIgnoreCase(user.getUsername()))
+			{
+				redirAttrs.addFlashAttribute("message", "You cannot delete your account!");
+				return mav;
+			}
+			
 			userService.deleteUser(id);
 			redirAttrs.addFlashAttribute("message", DELETE_SUCC_MESS);
 		} catch (Exception e) {
