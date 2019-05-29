@@ -18,24 +18,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		
-		http.csrf().disable();
+        http.authorizeRequests()
+	    	.antMatchers("/userInfo")
+	    	.hasAnyAuthority("ADMIN", "USER")
+	    	;
+
+	    http.authorizeRequests()
+	    	.antMatchers("/allUser", "/deleteUser/**")
+	    	.hasAuthority("ADMIN")
+	    	;
 		
 		http.authorizeRequests()
-			.antMatchers("/", "/login", "/checkLogin", "/register", "/createUser", "/js/**", "/css/**", "/fonts/**", "/images/**").permitAll()
-			.anyRequest().authenticated()
-			.and().httpBasic();
+			.antMatchers("/", "/checkLogin", "/register", "/createUser", "/js/**", "/css/**", "/fonts/**", "/images/**")
+			.permitAll()
+			;
 		
         http.authorizeRequests()
-        	.antMatchers("/userInfo")
-        	.access("hasAnyRole('USER', 'ADMIN')");
-
-        http.authorizeRequests()
-        	.antMatchers("/allUser")
-        	.access("hasRole('ADMIN')");
-		
+	        .anyRequest()
+	        .authenticated()
+	        .and().httpBasic()
+	        ;
+        
 		http.authorizeRequests()
 			.and().formLogin()
-            .loginPage("/login")
+            .loginPage("/login").permitAll()
             .failureUrl("/login?error")
             .defaultSuccessUrl("/")
             .usernameParameter("username")
@@ -48,11 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.clearAuthentication(true)
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/login")
-				.permitAll();
+				.permitAll()
+				;
 		
 		http.authorizeRequests()
 			.and().exceptionHandling()
-		        .accessDeniedPage("/error");
+		        .accessDeniedPage("/error")
+		        ;
 
     }
 
